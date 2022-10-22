@@ -1,0 +1,37 @@
+FROM selenium/standalone-firefox:106.0
+
+RUN sudo apt update
+RUN sudo apt-get -y install openjdk-11-jdk-headless
+
+
+
+
+#RUN cd /usr/local && \
+#    sudo curl -L https://services.gradle.org/distributions/gradle-7.2-bin.zip -o gradle-7.2-bin.zip && \
+#    sudo unzip gradle-7.2-bin.zip && \
+#    sudo rm gradle-7.2-bin.zip
+#
+## Export some environment variables
+#ENV GRADLE_HOME=/usr/local/gradle-7.2
+#ENV PATH=$PATH:$GRADLE_HOME/bin
+#
+#
+
+
+
+
+
+RUN mkdir /home/seluser/TesteApp
+COPY . /home/seluser/TesteApp
+RUN sudo chown -R  seluser /home/seluser/TesteApp
+RUN sudo chgrp -R  seluser /home/seluser/TesteApp
+
+WORKDIR /home/seluser/TesteApp
+#RUN mkdir /home/seluser/.gradle
+RUN /home/seluser/TesteApp/gradlew --refresh-dependencies
+
+
+### docker-compose up --build
+### docker exec -it application_container bash
+### gradle  -Dgeb.env=remote   test integrationTest
+

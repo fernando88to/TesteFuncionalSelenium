@@ -1,0 +1,40 @@
+version: "3"
+services:
+
+  application:
+    container_name: application_container
+    shm_size: 1gb
+    build:
+      context: .
+      dockerfile: Dockerfile3
+    working_dir: /home/seluser/TesteApp
+    environment:
+      - SE_NODE_MAX_SESSIONS=10
+    ports:
+      - "4444:4444"
+    networks:
+      - app-network
+    tty: true
+
+  #para assistir os video só consegue se parar esse container em especifico
+  firefox_video:
+    image: selenium/video:ffmpeg-4.3.1-20221021
+    volumes:
+      - /home/fernando/videostpm:/videos
+    depends_on:
+      - application
+    environment:
+      - DISPLAY_CONTAINER_NAME=application # aqui tem que ser o nome do container do firefox
+      - FILE_NAME=firefox_video.mp4
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+
+volumes:
+  cache_gradle:
+    driver: local
